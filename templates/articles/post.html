@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load articles_extras %}
+
+{% block title %} CyberBlog | Post {% endblock title %}
+
+{% block head_block %}
+<!-- Custom css for articles app -->
+<link rel="stylesheet" href="{% static 'css/articles.css' %}">
+{% endblock head_block %}
+
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 px-3 article-list">
+        <!-- success messages after contact forms submission -->
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} fade show p-2 mb-2" role="alert">
+            <strong>{{msg.tags|title}}! </strong> {{msg}}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- post content -->
+        <article class="blog-post my-3">
+            <h2 class="blog-post-title">{{post.title|title}}</h2>
+            <p class="blog-post-meta">{{post.pub_date|timesince}} ago | {{post.category}} | by <a
+                    href="{% url 'articles:post_by_author' post.author %}">{{post.author}}</a></p>
+
+            <div class="poster">
+                <img src="{{post.poster.url}}" alt="post thumbnails" width="100%" height="100%">
+            </div>
+
+            <div class="content mt-2">
+                <p>{{post.content|safe}}</p>
+            </div>
+        </article>
+        <hr>
+
+        <!-- Comments on this posts -->
+        <div class="comments">
+            <p class="fs-4 lead">Comments ({{comments.count}})</p>
+
+            <!-- Taking comments from user -->
+            <div class="taking-comments">
+                {% if user.is_authenticated %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <div class="row mx-0">
+                            <label for="comments" class="form-label">Comment</label>
+                            <div class="col-md-10">
+                                {{form.comment}}
+                                {{form.comment.errors}}
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-info mt-2 mt-md-0">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {% else %}
+                <h3>Login to comment <a href="{% url 'accounts:login' %}"><button class="btn btn-info ms-2">Login</button></a></h3>
+                {% endif %}
+            </div>
+
+            <!-- Displaying comments on posts -->
+            <div class="display-comment">
+                <!-- single comment -->
+                {% for cmt in comments %}
+                <div class="single-comment d-flex mb-2 bg-white">
+                    <div class="user-image p-2">
+                        <img class="rounded-circle profilepic-comment" src="{{cmt.user.profilepic.image.url}}" alt="">
+                    </div>
+                    <div class="comment-details ps-2 w-100">
+                        <div class="username date">
+                            <span class="text-info pe-2"><b>@{{cmt.user}}</b></span>
+                            <span class="badge bg-secondary px-2 text-white rounded">{{cmt.timestamp|timesince}}
+                                ago</span>
+                        </div>
+                        <div class="comment-msg">
+                            <p class="m-0">{{cmt.comment}}</p>
+                        </div>
+
+                        
+                        <!-- Adding reply button -->
+                        <div class="reply-section">
+                            {% if user.is_authenticated %}
+                            <button class="btn btn-sm btn-info" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#replyBox{{cmt.id}}" aria-expanded="false"
+                                aria-controls="replyBox{{cmt.id}}">
+                                Reply
+                            </button>
+                            {% endif %}
+                            <div class="collapse" id="replyBox{{cmt.id}}">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <div class="row mx-0">
+                                            <label for="comments" class="form-label">Give Reply</label>
+                                            <div class="col-md-10">
+                                                {{form.comment}}
+                                                {{form.comment.errors}}
+                                                <input type="hidden" name="parentId" value="{{cmt.id}}">
+                                            </div>
+                                            <div class="col-md-2 px-3 px-md-0">
+                                                <button class="btn btn-outline-info mt-2 mt-md-0">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Replies -->
+                            <div class="replies bg-light my-2 ">
+                                {% for reply in replyDict|get_val:cmt.id %}
+                                <div class="single-reply d-flex mb-2">
+                                    <div class="user-image p-2">
+                                        <img class="rounded-circle profilepic-comment"
+                                            src="{{reply.user.profilepic.image.url}}" alt="">
+                                    </div>
+                                    <div class="display-details ps-2 w-100">
+                                        <div class="username date">
+                                            <span class="text-info pe-2"><b>@{{reply.user}}</b></span>
+                                            <span
+                                                class="badge bg-secondary px-2 text-white rounded">{{reply.timestamp|timesince}}
+                                                ago</span>
+                                        </div>
+                                        <div class="comment-msg">
+                                            <p class="m-0">{{reply.comment}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- sidebar -->
+    <div class="col-md-4">
+        <div class="sticky-top">
+            <div class="px-4 py-2 bg-white rounded">
+                <div class="sidebar-heading mb-3">
+                    <h4 class="m-0">CATEGORY</h4>
+                </div>
+                <!-- category item -->
+                <ul class="list-group sidebar-category">
+                    {% for cat in allcategory %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a class="fst-normal" href="{% url 'articles:post_by_category' cat.id %}">{{cat.name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Latast post -->
+            <div class="px-4 py-2 latast-post bg-white">
+                <div class="sidebar-heading mb-3">
+                    <h4 class="m-0">LATAST POST</h4>
+                </div>
+                {% for post in latast %}
+                <li>
+                    <a class="fst-normal" href="{% url 'articles:post' post.slug %}">{{post.title|title}}</a>
+                    <span>{{post.pub_date|date}}</span>
+                </li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

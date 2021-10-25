@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} CyberBlog | Create Post {% endblock title %}
+
+{% block head_block %}
+
+<style>
+  .container {
+    background-color: #fff;
+    padding: 16px;
+  }
+</style>
+{% endblock head_block %}
+
+
+{% block content %}
+<p class="fs-4 lead text-center">Write Your Post Here...</p>
+
+<!-- Form for creating new post -->
+<form action="{% url 'articles:create_new_post' %}" method="post" {% if form.is_multipart %}
+  enctype="multipart/form-data" {% endif %}>
+  {% csrf_token %}
+
+  {{ form.media}}
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    {{form.title}}
+    {{form.title.errors}}
+  </div>
+  <div class="mb-3">
+    <label for="slug" class="form-label">Slug</label>
+    {{form.slug}}
+    {{form.slug.errors}}
+  </div>
+  <div class="mb-3">
+    <label for="articleContent" class="form-label">Article Content</label>
+    {{form.content}}
+    {{form.content.errors}}
+  </div>
+  <div class="row my-4 mx-0">
+    <div class="col-md-6 mb-3">
+      <label for="category" class="form-label">Select Category</label>
+      {{form.category}}
+      {{form.category.errors}}
+    </div>
+    <div class="col-md-6 mb-3">
+      <label for="poster" class="form-label">Upload post thumbnail</label>
+      {{form.poster}}
+      {{form.poster.errors}}
+    </div>
+  </div>
+  <div class="publish-button p-2">
+    <button type="submit" class="btn btn-info">Publish</button>
+  </div>
+</form>
+{% endblock content %}
+
+
+{% block js_block %}
+<!-- Custom javascript -->
+<script src="{% static 'js/slugify.js' %}"></script>
+
+<script>
+  //Query All input fields
+  var form_fields = document.getElementsByTagName('input')
+
+  for (var field in form_fields) {
+    form_fields[field].className += ' form-control'
+  }
+</script>
+{% endblock js_block %}

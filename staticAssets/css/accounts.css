@@ -1,0 +1,63 @@
+html,
+body {
+  height: 100%;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+}
+
+.container{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.form-register {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+  width: 330px;
+  padding: 15px;
+}
+
+.form-register i{
+    color: #0dcaf0;
+    font-size: 20px;
+}
+
+/* form error messages */
+.errorlist{
+    color: red;
+    text-align: justify;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 8px;
+  }
+
+.form-check-input:checked {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+}
+
+  .goto a{
+      text-decoration: none;
+  }
+
+  .col-md-3,
+  .col-md-8 {
+      background-color: white;
+  }
+
+  .profile-pic img {
+      border-radius: 50%;
+      width: 200px;
+      height: 200px;
+  }
+
+  .reset-password {
+    max-width: 50em;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    padding: 20px;
+}

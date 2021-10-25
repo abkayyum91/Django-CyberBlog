@@ -1,0 +1,43 @@
+/* form error messages */
+.errorlist{
+    color: red;
+    text-align: justify;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 8px;
+  }
+
+  .dropdown-item.active, 
+  .dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #0dcaf0
+}
+
+.dropdown-menu{
+  z-index: 1111;
+}
+
+.social-links a {
+  font-size: 29px;
+  color: #0dcaf0;
+  margin-left: 10px;
+  text-decoration: none;
+}
+.social-links a:hover {
+  font-size: 29px;
+  color: #ffffff;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.bg-custom{
+  background-color: rgb(208, 213, 214);
+}
+
+.post-category a{
+  color: black;
+}
+.post-category a:hover{
+  color: #fff;
+}

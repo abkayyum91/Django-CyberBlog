@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Cyber Blog - Home {% endblock title %}
+{% block homeactive %} active {% endblock homeactive %}
+
+{% block head_block %}
+<!-- Custom css for home app -->
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+<style>
+    .featured-post {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.575), rgba(0, 0, 0, 0.575)),
+        url("{{last.poster.url}}");
+        background-position: center center;
+        background-size: cover;
+    }
+</style>
+{% endblock head_block %}
+
+{% block content %}
+<!-- message after successul or invalid login attempt -->
+{% if messages %}
+{% for msg in messages %}
+<div class="alert alert-{{ msg.tags }} fade show p-2" role="alert">
+    <strong>{{msg.tags|title}}! </strong> {{msg}}
+</div>
+{% endfor %}
+{% endif %}
+
+
+<main class="container">
+
+    <div class="p-4 p-md-5 mb-4 text-white rounded featured-post">
+        <div class="col-md-6 px-0">
+            <a href="{% url 'articles:post' last.slug %}"
+                class="fs-5 fst-italic text-decoration-none text-white">{{last.title|upper}}</a>
+            <p class="lead my-3">{{last.content|safe|truncatechars:150}}</p>
+            <p class="lead mb-0"><a href="{% url 'articles:post' last.slug %}" class="text-white fw-bold">Continue
+                    reading...</a></p>
+        </div>
+    </div>
+
+    <!-- Featured post -->
+    <div class="category">
+        <h3 class="py-2">Featured Post</h3>
+    </div>
+    <div class="row mb-2 featured-post-title">
+        {% for post in featured %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-info fw-normal">{{post.category}}</strong>
+                    <div class="mb-1 text-muted">{{post.pub_date|timesince}}</div>
+                    <div class="post-title-cat">
+                        <a href="{% url 'articles:post' post.slug %}"
+                            class="card-text fs-5 mb-auto">{{post.title|title|truncatechars:140}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+    <!-- Posts by category -->
+    {% for cat in allposts %}
+    <div class="category">
+        <!-- category name -->
+        <h3 class="py-2">{{cat.0.category}}</h3>
+    </div>
+    <div class="row">
+        <!-- single post in category -->
+        {% for post in cat %}
+        <div class="col-md-4 py-1">
+            <div class="card single-post">
+                <img src="{{post.poster.url}}" alt="post thumbnails">
+                <div class="card-body p-3">
+                    <div class="post-title-cat">
+                        <a href="{% url 'articles:post' post.slug %}"
+                            class="fs-4 post-title">{{post.title|title|truncatechars:70}}</a>
+                    </div>
+                    <div class="read-more text-end pt-1">
+                        <span>by</span><a href="{% url 'articles:post_by_author' post.author %}"
+                            class="fs-5 ms-2">{{post.author}}</a>
+                        <p class="fs-6 m-0">{{post.pub_date|timesince}} ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+</main>
+{% endblock content %}

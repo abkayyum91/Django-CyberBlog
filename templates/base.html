@@ -1,0 +1,141 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} {% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <!-- Bootstrap icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+
+    {% block head_block %} {% endblock head_block %}
+
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid mx-3">
+            <a class="navbar-brand" href="/">Cyber Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% block homeactive %} {% endblock homeactive %}" aria-current="page"
+                            href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% block article_listactive %} {% endblock article_listactive %}"
+                            href="{% url 'articles:article_list' %}">Article List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% block contactactive %} {% endblock contactactive %}"
+                            href="{% url 'home:contact_us' %}">Contact Us</a>
+                    </li>
+                </ul>
+                <form class="d-flex" method="get" action="{% url 'home:search_query' %}">
+                    <div class="input-group">
+                        <input class="form-control bg-white" name="query" type="search" placeholder="Search...." aria-label="Search" required>
+                        <span class="input-group-text p-0"><button class="btn" type="submit">
+                            <i class="bi bi-search"></i></button></span>
+                    </div>
+                </form>
+                {% if request.user.is_authenticated %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle ms-2" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        {{user.username}}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-lg-end">
+                        {% if user.is_staff %}
+                        <li><a class="dropdown-item" href="{% url 'articles:create_new_post' %}">Write Guest Post</a></li>
+                        {% endif %}
+                        <li><a class="dropdown-item" href="{% url 'accounts:account_settings' %}">Account Setttings</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="account-details">
+                    <a href="{% url 'accounts:login' %}"><button class="btn btn-info ms-2">Login</button></a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-2">
+        {% block content %} {% endblock content %}
+    </div>
+
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+
+    {% block js_block %} {% endblock js_block %}
+
+    <footer class="row mx-0 bg-custom p-4 border-top">
+
+        <div class="col-md-4 p-3 h-100 my-auto">
+            <div class="copy-right text-center fw-normal">
+                <p>Read our CyberBlog for latast cyber security related information and keep your self updated in the
+                    digital
+                    era!</p>
+                <p>All Right Reserve to © CyberBlog </p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2 p-3 fw-normal">
+            <div class="join-newslater">
+                <p class="fs-5 lead mb-2">Join Newslater</p>
+                <form action="{% url 'home:newslater' %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-4 d-flex">
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Email...">
+                        <button type="submit" class="btn btn-info ms-2">Submit</button>
+                    </div>
+                </form>
+                <p class="fs-5 lead mb-2">Connect On Social Media</p>
+                <div class="social-links">
+                    <a href="https://twitter.com/" class="bi bi-twitter"></a>
+                    <a href="https://www.facebook.com/" class="bi bi-facebook"></a>
+                    <a href="https://www.instagram.com/" class="bi bi-instagram"></a>
+                    <a href="https://www.linkedin.com/" class="bi bi-linkedin"></a>
+                    <a href="https://www.youtube.com/" class="bi bi-youtube"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2 p-3 fw-normal">
+            <div class="post-category">
+                <p class="fs-4">Posts Category</p>
+                <a href="{% url 'articles:post_by_category' 2 %}" class="text-decoration-none ">Application Security</a>
+                <br>
+                <a href="{% url 'articles:post_by_category' 1 %}" class="text-decoration-none ">Network Security</a><br>
+                <a href="{% url 'articles:post_by_category' 5 %}" class="text-decoration-none ">Cyberterrorism</a><br>
+                <a href="{% url 'articles:post_by_category' 3 %}" class="text-decoration-none ">Cyber-Attack</a><br>
+                <a href="{% url 'articles:post_by_category' 4 %}" class="text-decoration-none ">Cybercrime</a><br>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+
+</html>

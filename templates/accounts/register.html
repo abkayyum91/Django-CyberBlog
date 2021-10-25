@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Cyber Blog - Home {% endblock title %}
+
+{% block head_block %}
+<!-- Custom css for home app -->
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock head_block %}
+
+{% block content %}
+
+<!-- user registration page -->
+<main class="form-register mx-auto">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="text-center">
+            <h1 class="h3 mb-3 fw-normal">REGISTER ACCOUNT</h1>
+        </div> 
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+            {{form.username}}
+            {{form.username.errors}}
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+            {{form.email}}
+            {{form.email.errors}}
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-key-fill"></i></span>
+            {{form.password1}}
+            {{form.password1.errors}}
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-key-fill"></i></span>
+            {{form.password2}}
+            {{form.password2.errors}}
+        </div>
+
+        <div class="form-check mb-2 text-start">
+            <input class="form-check-input" name="consent" type="checkbox" value="YES" id="loginconsent">
+            <label class="form-check-label ms-2" for="loginconsent">Keep Me Login</label>
+        </div>
+
+        <div class="d-flex justify-content-center mt-3 ">
+            <input class="btn btn-info" type="submit" value="Register Account">
+        </div>
+    </form>
+    <div class="mt-2 goto">
+        <div class="d-flex justify-content-center links">
+            Already have an account? <a href="{% url 'accounts:login' %}" class="ms-2"> Login</a>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+
+{% block js_block %} 
+<script>
+    //Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+
+    form_fields[2].placeholder = 'Username...';
+    form_fields[3].placeholder = 'E-mail...';
+    form_fields[4].placeholder = 'Password...';
+    form_fields[5].placeholder = 'Confirm-Password...';
+
+    for (var field in form_fields) {
+        form_fields[field].className += ' form-control'
+    }
+</script>
+{% endblock js_block %}

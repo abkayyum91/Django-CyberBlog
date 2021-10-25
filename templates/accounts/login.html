@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Cyber Blog - Home {% endblock title %}
+
+{% block head_block %}
+<!-- Custom css for account app -->
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock head_block %}
+
+{% block content %}
+
+<main class="form-register mx-auto">
+    <!-- message after successul or invalid login attempt -->
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags }} fade show " role="alert">
+        <strong>{{msg.tags|title}}! </strong> <br>
+        {{msg}}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="text-center">
+            <h1 class="h3 mb-3 fw-normal">LOGIN</h1>
+        </div> 
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+            <input type="text" class="form-control" id="Username" name="username" placeholder="Username...">
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-key-fill"></i></span>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
+        </div>
+        
+        <!-- Fetching next vaule from the url for login_required page -->
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{request.GET.next}}">
+        {% endif %}
+
+        <div class="d-flex justify-content-center mt-3 ">
+            <input class="btn btn-info form-control" type="submit" value="Login">
+        </div>
+    </form>
+    <div class="mt-2 goto">
+        <div class="forgot-password mb-2 p-1">
+            <a href="{% url 'accounts:reset_password' %}" class="text-danger">Forgot Password?</a>
+        </div>
+        <div class="d-flex justify-content-center links">
+            Don't have an account? <a href="{% url 'accounts:register' %}" class="ms-2">Create Account</a>
+        </div>  
+    </div>
+</main>
+
+{% endblock content %}

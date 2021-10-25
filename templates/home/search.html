@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CyberBlog | Search {% endblock title %}
+
+
+{% block head_block %}
+<!-- Custom css for articles app -->
+<link rel="stylesheet" href="{% static 'css/articles.css' %}">
+{% endblock head_block %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 px-3 article-list">
+
+        {% if allposts %}
+
+        <!-- single posts -->
+        {% for post in allposts %}
+        <div class="row bg-white p-3 mb-2 single-post">
+            <div class="col-12 p-0">
+                <div class="header d-flex author-details">
+                    <img class="rounded-circle my-auto" src="{{post.author.profilepic.image.url}}" width="40px"
+                        height="40px" alt="">
+                    <span class="date-author ps-2">
+                        <a href="{% url 'articles:post_by_author' post.author %}"
+                            class="fs-5 fw-normal">{{post.author}}</a>
+                        <span class="date">{{post.pub_date|timesince}} ago | {{post.category}}</span>
+                    </span>
+                </div>
+                <hr class="m-1">
+                <div class="card-body p-0">
+                    <a href="{% url 'articles:post' post.slug %}"
+                        class="card-title fs-4 fw-normal py-2">{{post.title|title}}</a>
+                    <p class="card-text mb-2 fs-5 fst-normal">{{post.content|safe|truncatechars:130}} <a
+                            href="{% url 'articles:post' post.slug %}" class="text-primary fs-6 fst-normal">Read
+                            more...</a></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <div class="empty-search">
+            <p>Your search - <strong>{{query}}</strong> - did not match any documents.</p>
+            <p>Suggestions:</p>
+            <li>Make sure that all words are spelled correctly.</li>
+            <li>Try different keywords.</li>
+            <li>Try more general keywords.</li>
+        </div>
+        {% endif %}
+
+
+        <!-- Implementing pagination features -->
+        <hr>
+        <nav aria-label="...">
+            <ul class="pagination">
+
+                {% if allposts.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{allposts.previous_page_number}}">Previous</a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Page {{allposts.number}} of {{allposts.paginator.num_pages}}</a>
+                </li>
+
+                {% if allposts.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{allposts.next_page_number}}">Next</a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+
+    </div>
+
+    <!-- sidebar -->
+    <div class="col-md-4">
+        <div class="sticky-top">
+            <div class="px-4 py-2 bg-white rounded">
+                <div class="sidebar-heading mb-3">
+                    <h4 class="m-0">CATEGORY</h4>
+                </div>
+
+                <!-- category item -->
+                <ul class="list-group sidebar-category">
+                    {% for cat in allcategory %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a class="fst-normal" href="{% url 'articles:post_by_category' cat.id %}">{{cat.name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Latast post -->
+            <div class="px-4 py-2 latast-post bg-white">
+                <div class="sidebar-heading mb-3">
+                    <h4 class="m-0">LATAST POST</h4>
+                </div>
+
+                {% for post in latast %}
+                <li>
+                    <a class="fst-normal" href="{% url 'articles:post' post.slug %}">{{post.title|title}}</a>
+                    <span>{{post.pub_date|date}}</span>
+                </li>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

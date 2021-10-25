@@ -1,0 +1,89 @@
+.sidebar-category li a{
+    text-decoration: none;
+    color: black;
+}
+.sidebar-category li a:hover{
+    color: rgb(32, 115, 240);
+}
+
+.latast-post li span{
+    display: block;
+    color: rgb(202, 202, 202);
+}
+.latast-post li{
+    list-style-type: none;
+    margin-bottom: 8px;
+}
+.latast-post li a{
+text-decoration: none;
+font-size: 18px;
+color: black;
+}
+.latast-post li a:hover{
+    color: rgb(32, 115, 240);
+}
+
+.sidebar-heading{
+    background-color: #212529;
+    padding: 10px;
+    color: #fff;
+}
+
+.article-list
+.author-details a{
+text-decoration: none;
+}
+.article-list
+.author-details span{
+color: rgb(201, 201, 201);
+}
+.article-list
+.author-details 
+.date-author a{
+display: block;
+}
+.article-list
+.author-details 
+.date-author span{
+display: block;
+font-size: 16px;
+}
+
+.card-body a{
+    text-decoration: none;
+    color: black;
+}
+.card-body a:hover{
+    color: rgb(32, 115, 240);
+}
+
+.single-post{
+    border-radius: 0.25rem !important;
+    border: 1px solid #dee2e6!important;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+
+.profilepic-comment{
+    width: 40px;
+    height: 40px;
+}
+
+/* setting post content paragraph and heading */
+.content p{
+    font-size: 18px;
+}
+.content h1{
+    font-size: 38px;
+}
+.content h2{
+    font-size: 24px;
+}
+.content h3{
+    font-size: 22px;
+}
+.content h4{
+    font-size: 20px;
+}
+.content li{
+    font-size: 16px;
+}
